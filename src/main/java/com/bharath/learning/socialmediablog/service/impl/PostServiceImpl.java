@@ -2,9 +2,12 @@ package com.bharath.learning.socialmediablog.service.impl;
 
 import com.bharath.learning.socialmediablog.dto.PostDto;
 import com.bharath.learning.socialmediablog.entity.PostEntity;
+import com.bharath.learning.socialmediablog.exceptions.ResourceNotFoundException;
 import com.bharath.learning.socialmediablog.repository.PostRepository;
 import com.bharath.learning.socialmediablog.service.PostService;
 import com.bharath.learning.socialmediablog.utils.PostEntityMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostServiceImpl.class);
 
     @Autowired
     private PostRepository postRepository;
@@ -47,11 +52,27 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto updatePost(PostDto postDto, long postIdToBeUpdated) {
-        return null;
+
+
+      PostEntity postEntityToBeUpdated =   this.postRepository.findById(postIdToBeUpdated).orElseThrow(() -> new RuntimeException("Post not found by id: "+ postIdToBeUpdated));
+
+      postEntityToBeUpdated.setContent(postDto.getContent());
+      postEntityToBeUpdated.setDescription(postDto.getDescription());
+      postEntityToBeUpdated.setTitle(postDto.getTitle());
+
+      PostEntity postEntityUpdated = this.postRepository.save(postEntityToBeUpdated);
+      return this.postEntityMapper.mapPostEntityToPostDto(postEntityUpdated);
     }
 
     @Override
     public boolean deletePostById(long postIdToBeDeleted) {
-        return false;
+        try {
+           PostEntity postEntity = this.postRepository.findById(postIdToBeDeleted).orElseThrow(() -> new ResourceNotFoundException("Post not found by id: "+ postIdToBeDeleted));
+            this.postRepository.delete(postEntity);
+        } catch (Exception e) {
+            LOGGER.error("Exception while deleting the Posts by Id: {}", postIdToBeDeleted);
+            return false;
+        }
+        return true;
     }
 }
