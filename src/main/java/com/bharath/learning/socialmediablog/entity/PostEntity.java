@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "posts")
 
@@ -25,6 +28,11 @@ public class PostEntity {
 
     @Column(name = "content")
     private String content;
+
+    //OneToMany Relationship
+    //Single posts can have multiple comments
+    @OneToMany(mappedBy = "postEntity")
+    private Set<CommentEntity> comments = new HashSet<>();
 
 
 }
