@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class PostController {
     @PostMapping
     public PostDto savePost(
             @Parameter(description = "Post details to create a new post", required = true)
-            @RequestBody PostDto postDto) {
+            @Valid @RequestBody PostDto postDto) {
         return this.postService.createPost(postDto);
     }
 
@@ -69,7 +70,7 @@ public class PostController {
     @PutMapping("/{postId}")
     public PostDto updatePost(
             @Parameter(description = "Updated post details", required = true)
-            @RequestBody PostDto postDtoToUpdated,
+            @Valid @RequestBody PostDto postDtoToUpdated,
             @Parameter(description = "ID of the post to be updated", required = true)
             @PathVariable long postId) {
         return this.postService.updatePost(postDtoToUpdated, postId);
