@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.models.OpenAPI;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +24,8 @@ import org.springframework.context.annotation.Configuration;
             email = "iambharath.ashoka@gmail.com",
             url = "https://bharathportfolio.com"
         )
-    ),
-    servers = @Server(url = "http://localhost:8080", description = "Local Server")
+    )
+//    servers = @Server(url = "http://localhost:8080", description = "Local Server")
 )
 public class SwaggerConfig {
 
@@ -44,3 +45,23 @@ public class SwaggerConfig {
             .build();
     }
 }
+
+
+/*
+@Configuration
+public class SwaggerConfig {
+
+    private static final String SERVICE_DESCRIPTION =
+            "\"This API allows users to create, fetch, update, and delete posts and comments on a social media blog platform.";
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new io.swagger.v3.oas.models.info.Info()
+                        .title("Tracking Service API")
+                        .version("1.0")
+                        .description(SERVICE_DESCRIPTION)
+                        .license(new io.swagger.v3.oas.models.info.License().name("Apache 2.0").url("http://springdoc.org")));
+    }
+}
+*/
