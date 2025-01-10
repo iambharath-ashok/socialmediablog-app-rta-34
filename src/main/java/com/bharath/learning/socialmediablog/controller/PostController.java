@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class PostController {
             @ApiResponse(responseCode = "404", description = "Post not found")
     })
     @GetMapping("/{postId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public PostDto fetchPostById(
             @Parameter(description = "ID of the post to be fetched", required = true)
             @PathVariable long postId) {
@@ -54,6 +56,7 @@ public class PostController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public PostDto savePost(
             @Parameter(description = "Post details to create a new post", required = true)
             @Valid @RequestBody PostDto postDto) {
@@ -68,6 +71,7 @@ public class PostController {
             @ApiResponse(responseCode = "404", description = "Post not found")
     })
     @PutMapping("/{postId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public PostDto updatePost(
             @Parameter(description = "Updated post details", required = true)
             @Valid @RequestBody PostDto postDtoToUpdated,
@@ -83,6 +87,7 @@ public class PostController {
             @ApiResponse(responseCode = "404", description = "Post not found")
     })
     @DeleteMapping("/{postId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deletePost(
             @Parameter(description = "ID of the post to be deleted", required = true)
             @PathVariable long postId) {
